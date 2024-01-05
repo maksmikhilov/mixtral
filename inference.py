@@ -1,17 +1,15 @@
-from transformers import AutoTokenizer
-import transformers
+from transformers import AutoTokenizer, BitsAndBytesConfig, AutoModelForCausalLM
 import torch
 
-model = "mistralai/Mixtral-8x7B-Instruct-v0.1"
-
-tokenizer = AutoTokenizer.from_pretrained(model)
-pipeline = transformers.pipeline(
-    "text-generation",
-    model=model,
-    model_kwargs={"torch_dtype": torch.float16, "load_in_4bit": True},
+model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16
 )
 
-messages = [{"role": "user", "content": "Сколько дней в году?"}]
-prompt = pipeline.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-outputs = pipeline(prompt, max_new_tokens=256, do_sample=True, temperature=0.7, top_k=50, top_p=0.95)
-print(outputs[0]["generated_text"])
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
+prompt = 'Как зовут В.В.Путина?'
+inputs = tokenizer(prompt, return_tensors="pt").to(0)
+output = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(output[0], skip_special_tokens=True))
