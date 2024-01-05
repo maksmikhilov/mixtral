@@ -83,5 +83,5 @@ prompt = """
 Рассчитайте на питоне MOU по Санкт-Петербургу
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(0)
-output = model.generate(**inputs, max_new_tokens=50)
+output = model.generate(**inputs, max_new_tokens=2048)
 print(tokenizer.decode(output[0], skip_special_tokens=True))
