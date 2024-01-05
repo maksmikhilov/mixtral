@@ -2,7 +2,7 @@ from transformers import AutoTokenizer
 import transformers
 import torch
 
-model = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+model = "/home/averianovaa/mixtral/mixtral-8x7b-32kseqlen"
 
 tokenizer = AutoTokenizer.from_pretrained(model)
 pipeline = transformers.pipeline(
