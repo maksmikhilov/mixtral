@@ -79,6 +79,8 @@ prompt = """
 10) GBOU = Трафик СПД / Средняя Абонентская База ШПД
 
 11) MOU = Голосовой трафик / Средняя  Абонентская База Телефонии
+
+Рассчитайте на питоне MOU по Санкт-Петербургу
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(0)
 output = model.generate(**inputs, max_new_tokens=50)
