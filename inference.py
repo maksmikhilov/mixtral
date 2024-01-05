@@ -2,9 +2,9 @@ from transformers import AutoTokenizer
 import transformers
 import torch
 
-model = "/home/averianovaa/mixtral/mixtral-8x7b-32kseqlen"
+model = "mistralai/Mixtral-8x7B-v0.1"
 
-tokenizer = AutoTokenizer.from_pretrained(model)
+tokenizer = AutoTokenizer.from_pretrained(model, force_download=True)
 pipeline = transformers.pipeline(
     "text-generation",
     model=model,
