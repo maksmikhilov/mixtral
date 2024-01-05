@@ -6,9 +6,9 @@ import torch
 model_id = "./mixtral-8x7b-32kseqlen"
 
 model = transformers.AutoModelForCausalLM.from_pretrained(
-    model_id,
-    device_map='auto'
+    f'{model_id}/config.json',
 )
+model.load_state_dict(torch.load(f'{model_id}/'))
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 generate_text = transformers.pipeline(
