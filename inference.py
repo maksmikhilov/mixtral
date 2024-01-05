@@ -3,12 +3,10 @@ import transformers
 import torch
 
 
-model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+model_id = "./mixtral-8x7b-32kseqlen"
 
 model = transformers.AutoModelForCausalLM.from_pretrained(
     model_id,
-    trust_remote_code=True,
-    torch_dtype=torch.bfloat16,
     device_map='auto'
 )
 
