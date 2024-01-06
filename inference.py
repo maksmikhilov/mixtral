@@ -88,7 +88,6 @@ prompt = """
 
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(device)
-model.to(device)
 output = model.generate(
     **inputs,
     max_new_tokens=2048,
