@@ -10,6 +10,7 @@ quantization_config = BitsAndBytesConfig(
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
 prompt = """
+#########################################
 У меня есть csv таблица со столбцами: ['dt', 'region_key', 'region_name', 'business_unit', 'macroregion_name', 'name_prnt_segm_level_1', 'business_service_name', 'service_name', 'tech', 'macro_tech', 'service_detail', 'macro_kpi', 'unit',       'kpi_value'], где:
 
 1) столбец region_name имеет следующие уникальные значения: ['Республика Башкортостан', 'Карачаево-Черкесская Республика', 'Костромская область', 'Ульяновская область' 'Республика Карелия',
@@ -80,8 +81,18 @@ prompt = """
 
 11) MOU = Голосовой трафик / Средняя  Абонентская База Телефонии
 
+#########################################
+
 Рассчитайте на питоне MOU по Санкт-Петербургу
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(0)
-output = model.generate(**inputs, max_new_tokens=2048)
+output = model.generate(
+    **inputs,
+    max_new_tokens=2048,
+    return_full_text=False,
+    temperature=0.1,
+    top_p=0.15,
+    top_k=0,
+    repetition_penalty=1.1
+    )
 print(tokenizer.decode(output[0], skip_special_tokens=True))
