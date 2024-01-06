@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, BitsAndBytesConfig, AutoModelForCausalLM
 import torch
 
+device = "cuda"
 model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -10,8 +11,8 @@ quantization_config = BitsAndBytesConfig(
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
 prompt = """
-#########################################
-У меня есть csv таблица со столбцами: ['dt', 'region_key', 'region_name', 'business_unit', 'macroregion_name', 'name_prnt_segm_level_1', 'business_service_name', 'service_name', 'tech', 'macro_tech', 'service_detail', 'macro_kpi', 'unit',       'kpi_value'], где:
+===System config start===
+У меня есть csv таблица со столбцами: ['dt', 'region_key', 'region_name', 'business_unit', 'macroregion_name', 'name_prnt_segm_level_1', 'business_service_name', 'service_name', 'tech', 'macro_tech', 'service_detail', 'macro_kpi', 'unit', 'kpi_value'], где:
 
 1) столбец region_name имеет следующие уникальные значения: ['Республика Башкортостан', 'Карачаево-Черкесская Республика', 'Костромская область', 'Ульяновская область' 'Республика Карелия',
  'Кемеровская область', 'Республика Бурятия', 'Республика Марий Эл',
@@ -81,17 +82,17 @@ prompt = """
 
 11) MOU = Голосовой трафик / Средняя  Абонентская База Телефонии
 
-#########################################
+===System config end===
 
 Рассчитайте на питоне MOU по Санкт-Петербургу
+
 """
-inputs = tokenizer(prompt, return_tensors="pt").to(0)
+inputs = tokenizer(prompt, return_tensors="pt").to(device)
+model.to(device)
 output = model.generate(
     **inputs,
     max_new_tokens=2048,
-    temperature=0.1,
-    top_p=0.15,
-    top_k=0,
-    repetition_penalty=1.1
+    temperature=0,
+    do_sample=True
     )
 print(tokenizer.decode(output[0], skip_special_tokens=True))
