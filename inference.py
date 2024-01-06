@@ -11,7 +11,9 @@ quantization_config = BitsAndBytesConfig(
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
 prompt = """
-===System config start===
+Ниже представлен системный промпт
+
+===System prompt===
 У меня есть csv таблица со столбцами: ['dt', 'region_key', 'region_name', 'business_unit', 'macroregion_name', 'name_prnt_segm_level_1', 'business_service_name', 'service_name', 'tech', 'macro_tech', 'service_detail', 'macro_kpi', 'unit', 'kpi_value'], где:
 
 1) столбец region_name имеет следующие уникальные значения: ['Республика Башкортостан', 'Карачаево-Черкесская Республика', 'Костромская область', 'Ульяновская область' 'Республика Карелия',
@@ -90,17 +92,18 @@ prompt = """
 
 16) Средняя Абонентская База <business_service_name> = (Абонентская База <business_service_name> + Абоненты на начало периода <business_service_name>) / 2
 
-8) Churn rate = Отток / Средняя Абонентская База 
+17) Churn rate = Отток / Средняя Абонентская База 
 
-9) ARPU = Доход / Средняя Абонентская База 
+18) ARPU = Доход / Средняя Абонентская База 
 
-10) GBOU = Трафик СПД / Средняя Абонентская База ШПД
+19) GBOU = Трафик СПД / Средняя Абонентская База ШПД
 
-11) MOU = Голосовой трафик / Средняя  Абонентская База Телефонии
+20) MOU = Голосовой трафик / Средняя  Абонентская База Телефонии
+===System prompt===
 
-===System config end===
+Задача:
 
-Рассчитай Churn Rate в спб
+Рассчитай ARPU для каждого макрорегиона за 2020 год
 
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(device)
