@@ -89,7 +89,6 @@ inputs = tokenizer(prompt, return_tensors="pt").to(0)
 output = model.generate(
     **inputs,
     max_new_tokens=2048,
-    return_full_text=False,
     temperature=0.1,
     top_p=0.15,
     top_k=0,
