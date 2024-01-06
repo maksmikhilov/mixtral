@@ -91,7 +91,6 @@ inputs = tokenizer(prompt, return_tensors="pt").to(device)
 output = model.generate(
     **inputs,
     max_new_tokens=2048,
-    temperature=0.0,
-    do_sample=True
+    temperature=0.1
     )
 print(tokenizer.decode(output[0], skip_special_tokens=True))
