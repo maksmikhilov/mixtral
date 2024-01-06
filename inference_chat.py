@@ -13,5 +13,5 @@ pipeline = transformers.pipeline(
 
 messages = [{"role": "user", "content": "Explain what a Mixture of Experts is in less than 100 words."}]
 prompt = pipeline.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-outputs = pipeline(prompt, max_new_tokens=256, do_sample=True, temperature=0.7, top_k=50, top_p=0.95)
+outputs = pipeline(prompt, max_new_tokens=1024, do_sample=True, temperature=0.1, top_k=50, top_p=0.95)
 print(outputs[0]["generated_text"])
