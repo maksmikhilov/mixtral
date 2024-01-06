@@ -54,25 +54,41 @@ prompt = """
 ['Абоненты на конец периода', 'Активная АБ 1М', 'Доходы',
  'Абоненты на начало периода', 'Голосовой трафик', 'Отток',
  'Уникальные пользователи', 'Подключения', 'Трафик в СПД']
+ 
+ 
+Так же у меня есть метрики, которве можно извлечь из этих данных:
 
-Пункт 9 это название собираемой метрики бизнеса, значение которой находится в столбце kpi_value
+1) Доход = df[df['macro_kpi'] == 'Доход']['kpi_value']
 
-Пункты 1-5 это различные фильтры услуг по которым можно фильтровать метрики из пункта 9
-Так же есть расчетные метрики, ниже приведу их формулы:
+2) Абонентская База = df[df['macro_kpi'] == 'Абоненты на конец периода']['kpi_value']
 
+3) Абонентская База <service_name> = df[(df['macro_kpi'] == 'Абоненты на конец периода') & (df['service_name'] == <service_name>)]['kpi_value']
 
-1) Абонентская База <service_name> = macro_kpi == 'Абоненты на конец периода' and service_name == <service_name>
+4) Абонентская База <business_service_name> = df[(df['macro_kpi'] == 'Абоненты на конец периода') & (df['business_service_name'] == <business_service_name>)]['kpi_value']
 
-2) Абонентская База <business _service_name> = macro_kpi == 'Абоненты на конец периода' and business _service_name == <business _service_name>
+5) Абонентов на начало периода = df[df['macro_kpi'] == 'Абоненты на начало периода']['kpi_value']
 
-3) Абонентов на начало периода <business _service_name> = macro_kpi == 'Абоненты на начало периода' and business _service_name == <business _service_name>
+6) Абонентов на начало периода <service_name> = df[(df['macro_kpi'] == 'Абоненты на начало периода') & (df['service_name'] == <service_name>)]['kpi_value']
 
-4) Абонентов на начало периода <service_name> = macro_kpi == 'Абоненты на начало периода' and service_name == <service_name>
-5) Средняя Абонентская База = (Абоненты на конец периода + Абоненты на начало периода) / 2
+7) Абонентов на начало периода <business_service_name> = df[(df['macro_kpi'] == 'Абоненты на начало периода') & (df['business_service_name'] == <business_service_name>)]['kpi_value']
 
-6) Средняя Абонентская База <service_name> = (Абонентская База <service_name> + Абоненты на начало периода <service_name>) / 2
+8) Активная АБ 1М = df[df['macro_kpi'] == 'Активная АБ 1М']['kpi_value']
 
-7) Средняя Абонентская База <business_service_name> = (Абонентская База <business_service_name> + Абоненты на начало периода <business_service_name>) / 2
+9) Уникальные пользователи = df[df['macro_kpi'] == 'Уникальные пользователи']['kpi_value']
+
+10) Трафик СПД = df[df['macro_kpi'] == 'Трафик в СПД']['kpi_value']
+
+11) Голосовой трафик = df[df['macro_kpi'] == 'Голосовой трафик']['kpi_value']
+
+12) Подключения = df[df['macro_kpi'] == 'Подключения']['kpi_value']
+
+13) Отток = df[df['macro_kpi'] == 'Отток']['kpi_value']
+
+14) Средняя Абонентская База = (Абоненты на конец периода + Абоненты на начало периода) / 2
+
+15) Средняя Абонентская База <service_name> = (Абонентская База <service_name> + Абоненты на начало периода <service_name>) / 2
+
+16) Средняя Абонентская База <business_service_name> = (Абонентская База <business_service_name> + Абоненты на начало периода <business_service_name>) / 2
 
 8) Churn rate = Отток / Средняя Абонентская База 
 
@@ -84,7 +100,7 @@ prompt = """
 
 ===System config end===
 
-Рассчитайте на питоне MOU по Санкт-Петербургу
+Рассчитай Churn Rate в спб
 
 """
 inputs = tokenizer(prompt, return_tensors="pt").to(device)
