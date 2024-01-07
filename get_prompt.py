@@ -1,7 +1,6 @@
 def get_prompt(task):
     
     prompt = f"""
-[INST]
 ___________ Начало условий задачи ___________
 1) Csv таблица со столбцами: ['dt', 'region_key', 'region_name', 'business_unit', 'macroregion_name', 'name_prnt_segm_level_1', 'business_service_name', 'service_name', 'tech', 'macro_tech', 'service_detail', 'macro_kpi', 'unit', 'kpi_value']
 
@@ -64,6 +63,5 @@ ___________ Конец условий задачи ___________
 
 Дополнительные условия:
 Решением дай код на питоне без лишнего текста и комментариев
-[/INST]
     """
     return prompt
