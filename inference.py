@@ -11,7 +11,7 @@ quantization_config = BitsAndBytesConfig(
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
-prompt = get_prompt('Вычисли GBOU для Урала за каждый месяц 2020 года и выведи значения в виде таблицы.')
+prompt = get_prompt('Круговая диаграмма подключений по каждому имени сервиса за 2020 год.')
 
 inputs = tokenizer(prompt, return_tensors="pt").to(device)
 output = model.generate(
