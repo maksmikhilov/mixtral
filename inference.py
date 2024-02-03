@@ -38,15 +38,15 @@ while True:
     # Переформулировка
     request = reformulation_request_general.get_response(df, request, model_params)
     text_alert(request)
-    
+    torch.cuda.empty_cache()
     # Анализ колонок
     columns_analysis_result = columns_analysis.get_response(df, request, model_params)
     text_alert(columns_analysis_result)
-
+    torch.cuda.empty_cache()
     # Составление плана 
     request_analysis_result = request_analysis_general.get_response(df, request, columns_analysis_result, model_params)
     text_alert(request_analysis_result)
-    
+    torch.cuda.empty_cache()
     # Генерация кода
     generate_code_result = generate_code_general.get_response(df, request, columns_analysis_result, request_analysis_result, model_params)
     text_alert(generate_code_result)
