@@ -15,7 +15,7 @@ quantization_config = BitsAndBytesConfig(
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config, use_flash_attention_2=True)
+model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config)
     
 def text_alert(text):
     base_url = 'https://mm-tradebot-2.ru/chat_gpt'
