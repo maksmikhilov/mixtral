@@ -2,7 +2,6 @@ from transformers import AutoTokenizer, BitsAndBytesConfig, AutoModelForCausalLM
 import torch
 from model_request.general import columns_analysis
 from model_request.general import reformulation_request as reformulation_request_general
-from model_request.image import request_analysis as request_analysis_image
 from model_request.general import request_analysis as request_analysis_general
 from model_request.general import generate_code as generate_code_general
 import requests
