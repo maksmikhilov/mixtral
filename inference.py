@@ -8,7 +8,7 @@ import requests
 import pandas as pd
 import utils
 
-model_id = "mistralai/Mixtral-8x7B-v0.1"
+model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_compute_dtype=torch.float16
