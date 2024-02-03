@@ -1,8 +1,14 @@
 from transformers import AutoTokenizer, BitsAndBytesConfig, AutoModelForCausalLM
 import torch
-from SheetsGPT_steps import table_analys, request_analys, generate_code
+from gpt_request.general import columns_analysis
+from gpt_request.general import reformulation_request as reformulation_request_general
+from gpt_request.image import request_analysis as request_analysis_image
+from gpt_request.general import request_analysis as request_analysis_general
+from gpt_request.general import generate_code as generate_code_general
 import requests
-device = "cuda"
+import pandas as pd
+import utils
+
 model_id = "mistralai/Mixtral-8x7B-v0.1"
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -11,16 +17,6 @@ quantization_config = BitsAndBytesConfig(
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, quantization_config=quantization_config, use_flash_attention_2=True)
-def inference(prompt):
-    prompt = tokenizer(prompt, return_tensors="pt").to(device)
-    response = model.generate(
-        **prompt,
-        max_new_tokens=2048,
-        temperature=0.1,
-        do_sample=True,
-        pad_token_id=tokenizer.eos_token_id
-    )
-    return tokenizer.decode(response[0], skip_special_tokens=True)
     
 def text_alert(text):
     base_url = 'https://mm-tradebot-2.ru/chat_gpt'
@@ -34,16 +30,32 @@ def text_alert(text):
     
 while True:
     request = input('Введите запрос')
+    model_params = {
+        'tokenizer': tokenizer,
+        'model': model
+    }
+    df = pd.read_excel('test.xlsx')
     
-    table_analys_prompt = table_analys.get_prompt()
-    table_analys_result = inference(table_analys_prompt)
-    text_alert(table_analys_result)
+    # Переформулировка
+    request = reformulation_request_general.get_response(df, request, model_params)
+    text_alert(request)
     
-    request_analys_prompt = request_analys.get_prompt(request, table_analys_result)
-    request_analys_result = inference(table_analys_prompt)
-    text_alert(request_analys_result)
+    # Анализ колонок
+    columns_analysis_result = columns_analysis.get_response(df, request, model_params)
+    text_alert(columns_analysis_result)
+
+    # Составление плана 
+    request_analysis_result = request_analysis_general.get_response(df, request, columns_analysis_result, model_params)
+    text_alert(request_analysis_result)
     
-    generate_code_prompt = generate_code.get_prompt(table_analys_result, request_analys_result)
-    generate_code_result = inference(generate_code_prompt)
+    # Генерация кода
+    generate_code_result = generate_code_general.get_response(df, request, columns_analysis_result, request_analysis_result, model_params)
     text_alert(generate_code_result)
+    
+    code_result = utils.exec_code(generate_code_result, df)
+
+    if code_result.get('err'):
+        text_alert(code_result['err'])
+    else:
+        text_alert(code_result['code_result'])
     
