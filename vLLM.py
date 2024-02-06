@@ -23,7 +23,7 @@ df = pd.read_excel('test.xlsx')
 request = """Вычислить ARPU для услуги 'Телефония (фиксированная)' отдельно по каждому макрорегиону без учёта ШПД"""
 
 # Переформулировка
-request = reformulation_request_general.get_prompt(llm, params, df, request)
+request = reformulation_request_general.get_response(llm, params, df, request)
 print(request)
 
 # Составление плана
