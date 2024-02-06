@@ -1,7 +1,5 @@
-from utils import model_request
-from model_request.general.const_values import metrics, get_columns, get_unique_values, get_first_rows
-
-    
+from model_request.general.const_values import data_types, column_relations, formulas, get_unique_values, get_first_rows, get_columns
+import utils
 def get_prompt(df, request):
     prompt = f"""
 Ты аналитик данных с опытом 20 лет. 
@@ -16,9 +14,6 @@ def get_prompt(df, request):
 
 Ключевые столбцы имеют следующие уникальные значения:
 {get_unique_values(df)}
-
-Подсказки к таблице:
-{metrics}
 
 
 Босс дал тебе задачу по анализу этой таблицы.
@@ -40,15 +35,14 @@ def get_prompt(df, request):
 Ожидаемый тип данных — <вид результата>.
 '''
 
-Запрос босса:'''{request}'''.
+Запрос босса:'''{request}'''
 """
     return prompt
     
-def get_response(df, request, model_params):
+def get_response(llm, params, df, request):
     prompt = get_prompt(df, request)
-    print(prompt)
-    model_response = model_request(
-        prompt,
-        model_params
-    )
-    return model_response
+    outputs = llm.generate([prompt], params)
+    for output in outputs:
+        generated_text = output.outputs[0].text
+    utils.text_alert(generated_text)
+    return generated_text

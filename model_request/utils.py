@@ -1,7 +1,9 @@
 import io
 import pandas as pd
+import openai_async
+import os
 from contextlib import redirect_stdout
-import requests
+
 def parse_code(generate_code_result):
     start_index = generate_code_result.find('```') + 9
     end_index = generate_code_result.rfind('```')
@@ -36,13 +38,4 @@ def exec_code(generate_code_result, df):
             'err': None,
             'generate_code_result': generate_code_result
         }
-
-def text_alert(text):
-    base_url = 'https://mm-tradebot-2.ru/chat_gpt'
-    text_data = {
-        'text': text
-    }
-    requests.post(
-        f'{base_url}/text_alert',
-        json=text_data
-        )
+    

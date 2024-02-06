@@ -1,65 +1,64 @@
-from model_request.general.const_values import metrics, get_unique_values, get_first_rows
-from utils import model_request
+from model_request.general.const_values import data_types, column_relations, formulas, get_unique_values, get_first_rows, get_columns
+import utils
 
-    
-def get_prompt(df, request, columns_analysis_result):
+def get_prompt(df, request):
     prompt = f"""
-Ты аналитик данных с опытом 20 лет. 
-Все 20 лет ты анализируешь только одну таблицу, и знаешь все её нюансы.
-За качественно выполненную работу тебе дадут премию.
-Если ты облажаешься, тебя уволят.
+Ты аналитик данных с опытом 20 лет.
 
-Напомню тебе информацию о таблице, с которой ты работаешь.
-<table_info>
-    Анализ столбцов: 
-    <columns_analysis>
-        {columns_analysis_result}
-    </columns_analysis>
+Твоя задача — составить детальное техническое задание по исполнению запроса к таблице. Результат должен соответствовать типу данных, который обозначен в запросе. Ниже предоставлена информация о таблице:
 
-    Первые три строки из этой таблицы:
-    <rows>
-        {get_first_rows(df)}
-    </rows>
+1. Таблица имеет следующие столбцы и типы данных в них:
+<data_types>
+{data_types}
+</data_types>
 
-    Ключевые столбцы имеют следующие уникальные значения:
-    <unique_values>
-        {get_unique_values(df)}
-    </unique_values>
+2. Ключевые связи между столбцами таблицы:
+<column_relations>
+{column_relations}
+</column_relations>
 
-    Подсказки к таблице:
-    <hints>
-        {metrics}
-    </hints>
-</table_info>
+3. Первые три строки этой таблицы:
+<first_rows>
+{get_first_rows(df)}
+</first_rows>
 
-<task>
-    Твоя работа - составлять последовательное техническое задание (step by step) по получению данных из таблицы на основе запроса Босса, используя <table_info>
-</task>
+4. Столбцы с уникальными значениями:
+<unique_values>
+{get_unique_values(df)}
+</unique_values>
 
-Шаблон твоего ответа:
-<template>
-1. <цель пункта>
-  1.1. <подпункт по достижению цели и его подробное описание>
-  1.2. <подпункт по достижению цели и его подробное описание>
-  1.3. <подпункт по достижению цели и его подробное описание>
-2. <цель пункта>
-  2.1. <подпункт по достижению цели и его подробное описание>
-  2.2. <подпункт по достижению цели и его подробное описание>
-</template>
+5. Ключевые формулы для вычислений:
+<formulas>
+{formulas}
+</formulas>
 
-Вот запрос, на основе которого ты должен написать техническое задание:
-<request>
-  {request}
-</request>
-    """
+Примечания:
+1) Используй для вычислений столбцы с типом "Показатель".
+2) ОБЯЗАТЕЛЬНО учитывай связи между столбцами из блока <column_relations> при составлении формул!
+
+Ответ пиши ТОЛЬКО по этому шаблону:
+'''
+1. Вычислить [Значение] для [Фильтр] [Группировка], [Фильтр]:
+    1.1 Выбрать данные по [Фильтр] и исключить данные по [Фильтр];
+    1.2 Сгруппировать данные по [Группировка];
+    1.3 Рассчитать [Значение], где
+        1.3.1 [Параметр] = [Операция (Столбец)] при [Фильтр] и [Фильтр];
+        1.3.2 [Параметр] = ([Значение 1] + [Значение 2]) / 2, где:
+            1.3.2.1 [Значение 1] = [Операция (Столбец)] при [Фильтр] и [Фильтр];
+            1.3.2.2 [Значение 2] = [Операция (Столбец)] при [Фильтр] и [Фильтр];
+
+Формат вывода - <формат вывода из запроса Босса>.            
+'''
+
+
+Вот запрос Босса:
+{request}"""
     return prompt
     
-def get_response(df, request, columns_analysis_result, model_params):
-    prompt = get_prompt(df, request, columns_analysis_result)
-    print(prompt)
-    gpt_response = model_request(
-        prompt,
-        model_params
-    )
-    print(gpt_response)
-    return gpt_response
+def get_response(llm, params, df, request):
+    prompt = get_prompt(df, request)
+    outputs = llm.generate([prompt], params)
+    for output in outputs:
+        generated_text = output.outputs[0].text
+    utils.text_alert(generated_text)
+    return generated_text

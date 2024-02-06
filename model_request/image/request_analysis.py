@@ -1,4 +1,4 @@
-from gpt_request.general.const_values import metrics, get_columns, get_unique_values, get_first_rows
+from gpt_request.general.const_values import hin, get_columns, get_unique_values, get_first_rows
 from gpt_request.utils import gpt_request
 
 model = 'gpt-3.5-turbo-1106'
