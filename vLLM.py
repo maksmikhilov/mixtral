@@ -1,4 +1,5 @@
-from vllm import LLM, SamplingParams
+from vllm import LLM, SamplingParams,
+import torch
 prompts = [
     "Hello, my name is",
     "The president of the United States is",
@@ -7,7 +8,16 @@ prompts = [
 ]
 sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
 
-llm = LLM(model="mistralai/Mixtral-8x7B-v0.1", tensor_parallel_size=8, download_dir='/home/ubuntu/models_weight', gpu_memory_utilization=0.5)
+llm = LLM(
+    model="TheBloke/Mixtral-8x7B-Instruct-v0.1-GPTQ",
+    quantization="gptq",
+    dtype=torch.float16,
+    revision="gptq-8bit--1g-actorder_True",
+    gpu_memory_utilization=0.75,
+    disable_custom_all_reduce=True,
+    enforce_eager=True,
+    download_dir='/home/ubuntu/models_weight',
+    )
 
 outputs = llm.generate(prompts, sampling_params)
 
