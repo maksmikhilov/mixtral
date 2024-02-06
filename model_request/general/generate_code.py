@@ -49,8 +49,8 @@ def get_prompt(df, request_analysis_result):
     return prompt
     
     
-def get_response(llm, params, df, request):
-    prompt = get_prompt(df, request)
+def get_response(llm, params, df, request, request_analysis_result):
+    prompt = get_prompt(df, request, request_analysis_result)
     outputs = llm.generate([prompt], params)
     for output in outputs:
         generated_text = output.outputs[0].text

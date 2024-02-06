@@ -14,6 +14,7 @@ llm = LLM(
     tensor_parallel_size=2,
     dtype=torch.float16,
     revision="main",
+    max_model_len=1500,
     enforce_eager=True,
     download_dir='/home/ubuntu/models_weight',
     )
