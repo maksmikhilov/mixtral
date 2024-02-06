@@ -2,7 +2,7 @@ from model_request.general.const_values import data_types, column_relations, for
 import utils
 
 
-def get_prompt(df, request_analysis_result):
+def get_prompt(df, request, request_analysis_result):
     prompt = f"""Ты Python программист с опытом 20 лет.
 
 Твоя задача — написать код по техническому заданию от аналитика данных. Техническое задание описывает как правильно исполнить запрос к таблице. Ниже предоставлена иформация о таблице:
