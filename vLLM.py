@@ -5,7 +5,7 @@ from model_request.general import generate_code as generate_code_general
 import torch
 import pandas as pd
 import utils
-params = SamplingParams(temperature=0.8, top_p=0.95)
+params = SamplingParams(temperature=0.8, top_p=0.9, max_tokens=2000)
 
 print('Загружаем модель')
 llm = LLM(
