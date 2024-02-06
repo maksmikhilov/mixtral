@@ -7,7 +7,7 @@ prompts = [
 ]
 sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
 
-llm = LLM(model="mistralai/Mixtral-8x7B-v0.1", tensor_parallel_size=4, download_dir='/home/ubuntu/models_weight')
+llm = LLM(model="mistralai/Mixtral-8x7B-v0.1", tensor_parallel_size=8, download_dir='/home/ubuntu/models_weight')
 
 outputs = llm.generate(prompts, sampling_params)
 
