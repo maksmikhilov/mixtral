@@ -5,15 +5,13 @@ from model_request.general import generate_code as generate_code_general
 import torch
 import pandas as pd
 import utils
-params = SamplingParams(temperature=0.8, top_p=0.9, max_tokens=2000)
+params = SamplingParams(temperature=0.3, top_p=0.4, max_tokens=2000)
 
 print('Загружаем модель')
 llm = LLM(
-    model="TheBloke/Mixtral-8x7B-Instruct-v0.1-GPTQ",
-    quantization="gptq",
-    tensor_parallel_size=2,
+    model="mistralai/Mixtral-8x7B-v0.1",
+    tensor_parallel_size=4,
     dtype=torch.float16,
-    revision="main",
     max_model_len=5000,
     enforce_eager=True,
     download_dir='/home/ubuntu/models_weight',
