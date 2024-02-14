@@ -7,6 +7,6 @@ client = mii.server(
     restful_api_port=8000,
 )
 """
-pipe = mii.pipeline("TheBloke/Mixtral-8x7B-Instruct-v0.1-GPTQ")
+pipe = mii.pipeline("mistralai/Mixtral-8x7B-Instruct-v0.1")
 response = pipe(["[INST] DeepSpeed is? [/INST]", "DeepSpeed is?"], max_new_tokens=128)
 print(response)
