@@ -4,5 +4,5 @@ client = mii.serve(
     deployment_name="generate",
     enable_restful_api=True,
     restful_api_port=5555,
-    tensor_parallel=2,
+    tensor_parallel=4,
 )
