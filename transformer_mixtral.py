@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 model_name_or_path = "TheBloke/Mixtral-8x7B-Instruct-v0.1-GPTQ"
-model = AutoModelForCausalLM.from_pretrained(model_name_or_path, device_map="auto", trust_remote_code=False, revision="gptq-4bit-128g-actorder_True")
+model = AutoModelForCausalLM.from_pretrained(model_name_or_path, device_map="auto", trust_remote_code=False, revision="main")
 
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
 
